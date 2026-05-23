@@ -269,12 +269,4 @@ Password:
 merchant123
 ```
 
----
-
-# Current Project Status
-
-The backend/database architecture and admin systems are fully integrated with MongoDB and JWT authentication.
-
-The merchant portal has been successfully migrated from placeholder/mock systems into a backend-connected full-stack implementation.
-
-The customer portal frontend is mostly complete visually and structurally, but several customer features still use placeholder/mock data and require additional backend integration in future development.
+---placeholder/mock data and require additional backend integration in future development.
