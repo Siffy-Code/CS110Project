@@ -38,6 +38,9 @@ How to run (local, quick-start)
 
   2. cd adminPortal && npm install && npm run dev
      # http://localhost:5174   (proxies /api to the backend)
+     
+  3. cd customerPortal && npm install && npm run dev
+     # http://localhost:5173   (proxies /api to the backend)
 ==================================================
 EXPANDED DETAILS AND INSTRUCTIONS (*NOT* THE TLDR)
 ==================================================
