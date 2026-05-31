@@ -1,3 +1,5 @@
+import React from "react";
+
 import { BrowserRouter, Routes, Route, Navigate }
 from "react-router-dom";
 
@@ -27,6 +29,14 @@ from "./merchant/pages/MerchantFinances.jsx";
 
 import MerchantProfile
 from "./merchant/pages/MerchantProfile.jsx";
+
+import MerchantEditListings
+from "./merchant/pages/MerchantEditServices.jsx";
+
+import MerchantMessages
+from "./merchant/pages/MerchantMessageBoard.jsx";
+import MerchantMessageDetails
+from "./merchant/pages/MerchantMessageDetails.jsx";
 
 function App() {
 
@@ -62,6 +72,11 @@ function App() {
                         />
 
                         <Route
+                            path="/editservices"
+                            element={<MerchantEditListings />}
+                        />
+
+                        <Route
                             path="/orders"
                             element={<MerchantOrders />}
                         />
@@ -74,6 +89,14 @@ function App() {
                         <Route
                             path="/profile"
                             element={<MerchantProfile />}
+                        />
+                        <Route
+                            path="/messages"
+                            element={<MerchantMessages />}
+                        />
+                        <Route
+                            path="/messages/:id"
+                            element={<MerchantMessageDetails />}
                         />
 
                     </Route>
