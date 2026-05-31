@@ -27,6 +27,10 @@ const orderSchema = new mongoose.Schema(
             enum: ["pending", "completed", "cancelled", "refunded"],
             default: "pending",
         },
+        manualEntry: {
+            type: Boolean,
+            default: false,
+        },
     },
     { timestamps: true }
 );
