@@ -1,10 +1,16 @@
+import React from "react";
+
 import { useEffect, useState } from "react";
 
 import { api } from "../api";
 
 import "../styles/merchant.css";
 
+
+
 export default function MerchantEditServices() {
+
+
 
     const [listings, setListings] =
         useState([]);
@@ -23,6 +29,16 @@ export default function MerchantEditServices() {
 
     const [success, setSuccess] =
         useState("");
+
+const [newListing, setNewListing] =
+    useState({
+        title: "",
+        description: "",
+        price: "",
+        category: "",
+        kind: "service",
+        imageUrl: "",
+    });
 
     useEffect(() => {
 
@@ -80,7 +96,41 @@ export default function MerchantEditServices() {
             })
         );
     }
+    async function createListing() {
 
+    setError("");
+    setSuccess("");
+
+    try {
+
+        const res =
+            await api.createListing(
+                newListing
+            );
+
+        setListings((prev) => [
+            res.listing,
+            ...prev,
+        ]);
+
+        setNewListing({
+            title: "",
+            description: "",
+            price: "",
+            category: "",
+            kind: "service",
+            imageUrl: "",
+        });
+
+        setSuccess(
+            "Listing created successfully."
+        );
+
+    } catch (err) {
+
+        setError(err.message);
+    }
+}
     async function saveListing(listing) {
 
         setSavingId(listing._id);
@@ -207,7 +257,180 @@ export default function MerchantEditServices() {
                 </div>
 
             ) : null}
+            <div
+    className="info-box"
+    style={{ marginBottom: "25px" }}
+>
 
+    <h2 className="section-header">
+        Create New Listing
+    </h2>
+
+    <div className="form-group">
+
+        <label>Title</label>
+
+        <input
+            className="text-input"
+            value={newListing.title}
+            onChange={(e) =>
+                setNewListing({
+                    ...newListing,
+                    title: e.target.value,
+                })
+            }
+        />
+
+    </div>
+
+    <div className="form-group">
+
+        <label>Description</label>
+
+        <textarea
+            className="text-area"
+            value={newListing.description}
+            onChange={(e) =>
+                setNewListing({
+                    ...newListing,
+                    description:
+                        e.target.value,
+                })
+            }
+        />
+
+    </div>
+
+    <div className="two-column-layout">
+
+        <div className="left-panel">
+
+            <div className="form-group">
+
+                <label>Price</label>
+
+                <input
+                    className="text-input"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={newListing.price}
+                    onChange={(e) =>
+                        setNewListing({
+                            ...newListing,
+                            price:
+                                e.target.value,
+                        })
+                    }
+                />
+
+            </div>
+
+        </div>
+
+        <div className="right-panel">
+
+            <div className="form-group">
+
+                <label>Category</label>
+
+                <select
+                    className="dropdown-input"
+                    value={
+                        newListing.category
+                    }
+                    onChange={(e) =>
+                        setNewListing({
+                            ...newListing,
+                            category:
+                                e.target.value,
+                        })
+                    }
+                >
+
+                    <option value="">
+                        None
+                    </option>
+
+                    {categories.map((cat) => (
+
+                        <option
+                            key={cat._id}
+                            value={cat._id}
+                        >
+
+                            {cat.name}
+
+                        </option>
+
+                    ))}
+
+                </select>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div className="form-group">
+
+        <label>Image URL</label>
+
+        <input
+            className="text-input"
+            value={
+                newListing.imageUrl
+            }
+            onChange={(e) =>
+                setNewListing({
+                    ...newListing,
+                    imageUrl:
+                        e.target.value,
+                })
+            }
+        />
+
+    </div>
+
+    <div className="form-group">
+
+        <label>Type</label>
+
+        <select
+            className="dropdown-input"
+            value={newListing.kind}
+            onChange={(e) =>
+                setNewListing({
+                    ...newListing,
+                    kind:
+                        e.target.value,
+                })
+            }
+        >
+
+            <option value="service">
+                Service
+            </option>
+
+            <option value="product">
+                Product
+            </option>
+
+        </select>
+
+    </div>
+
+    <button
+        className="primary-button"
+        onClick={createListing}
+    >
+
+        Create Listing
+
+    </button>
+
+</div>
             <div className="service-option-list">
 
                 {listings.length === 0 ? (

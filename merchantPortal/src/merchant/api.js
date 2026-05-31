@@ -68,6 +68,8 @@ export const api = {
 
     listListings: () => request("/merchant/listings"),
 
+    merchantOrders: () => request("/merchant/orders"),
+
     createListing: (payload) =>
         request("/merchant/listings", {
             method: "POST",
@@ -86,9 +88,64 @@ export const api = {
         }),
 
     listCategories: () => request("/categories"),
+        
+    createManualOrder: (payload) =>
+        request(
+            "/merchant/orders",
+            {
+                method: "POST",
+                body: payload,
+            }
+        ),
+    updateOrderStatus:
+        (id, status) =>
+            request(
+                `/merchant/orders/${id}/status`,
+                {
+                    method: "PATCH",
+                    body: { status },
+                }
+            ),
+
+    merchantMessages: () =>
+        request("/merchant/messages"),
+
+    merchantConversation:
+    (id) =>
+        request(
+            `/merchant/messages/${id}`
+        ),
+    createConversation:
+    (payload) =>
+        request(
+            "/merchant/messages",
+            {
+                method: "POST",
+                body: payload,
+            }
+        ),
+    sendMerchantMessage:
+        (id, content) =>
+            request(
+                `/merchant/messages/${id}`,
+                {
+                    method: "POST",
+                    body: { content },
+                }
+            ),
 
     publicListings: (params = {}) => {
         const qs = new URLSearchParams(params).toString();
         return request(`/listings${qs ? `?${qs}` : ""}`, { auth: false });
     },
+
+    updateConversationArchive:
+    (id, archived) =>
+        request(
+            `/merchant/messages/${id}/archive`,
+            {
+                method: "PATCH",
+                body: { archived },
+            }
+        ),
 };

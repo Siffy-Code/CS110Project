@@ -1,3 +1,5 @@
+import React from "react";
+
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext.jsx";
 import "../styles/merchant.css";
@@ -17,70 +19,41 @@ export default function MerchantLayout() {
             <aside className="admin-sidebar">
 
                 <div className="admin-brand">
-                    <div className="admin-brand-title">
-                        Merchant Portal
-                    </div>
-
+                    <NavLink
+                        to="/"
+                        className="admin-brand-title"
+                        style={{
+                            textDecoration: "none",
+                            color: "inherit",
+                            cursor: "pointer",
+                        }}
+                    >
+                    </NavLink>
+                    <NavLink
+                        to="/"
+                        className="primary-button"
+                        style={{
+                            display: "block",
+                            marginTop: "10px",
+                            textAlign: "center",
+                        }}
+                    >
+                        Merchant Portal Dashboard
+                    </NavLink>    
                     <div className="admin-brand-sub">
-                        {merchant?.storeName || "Marketplace Merchant"}
+                        {"Store Title: "+merchant?.storeName || "Marketplace Merchant"}
                     </div>
                 </div>
 
-                <nav className="admin-nav">
-
-                    <NavLink
-                        to="/"
-                        end
-                        className="admin-nav-link"
-                    >
-                        Dashboard
-                    </NavLink>
-
-                    <NavLink
-                        to="/listings"
-                        className="admin-nav-link"
-                    >
-                        Listings
-                    </NavLink>
-
-                    <NavLink
-                        to="/orders"
-                        className="admin-nav-link"
-                    >
-                        Orders
-                    </NavLink>
-
-                    <NavLink
-                        to="/finances"
-                        className="admin-nav-link"
-                    >
-                        Finances
-                    </NavLink>
-
-                    <NavLink
-                        to="/messages"
-                        className="admin-nav-link"
-                    >
-                        Messages
-                    </NavLink>
-
-                    <NavLink
-                        to="/profile"
-                        className="admin-nav-link"
-                    >
-                        Profile
-                    </NavLink>
-
-                </nav>
-
+               
                 <div className="admin-user-card">
 
                     <div className="admin-user-name">
-                        {user?.name}
+                        {"User Name: "+user?.name}
                     </div>
 
                     <div className="admin-user-email">
-                        {user?.email}
+                        {"Registered Email: "+user?.email}
                     </div>
 
                     <button
