@@ -38,6 +38,9 @@ from "./merchant/pages/MerchantMessageBoard.jsx";
 import MerchantMessageDetails
 from "./merchant/pages/MerchantMessageDetails.jsx";
 
+import MerchantRegister
+from "./merchant/pages/MerchantRegister.jsx";
+
 function App() {
 
     return (
@@ -52,7 +55,12 @@ function App() {
                         path="/login"
                         element={<MerchantLogin />}
                     />
-
+                    <Route
+                        path="/register"
+                        element={
+                            <MerchantRegister />
+                        }
+                    />
                     <Route
                         element={
                             <ProtectedRoute>

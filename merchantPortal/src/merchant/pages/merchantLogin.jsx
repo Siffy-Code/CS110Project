@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../AuthContext.jsx";
-
+import { Link } from "react-router-dom";
 import "../styles/merchant.css";
 
 export default function MerchantLogin() {
@@ -129,9 +129,27 @@ export default function MerchantLogin() {
                         : "Sign in"}
 
                 </button>
+                        <div
+                            className="subtext"
+                            style={{
+                                marginTop: "20px",
+                            }}
+                        >
 
+                            Need a merchant account?
+
+                            {" "}
+
+                            <Link to="/register">
+
+                                Register
+
+                            </Link>
+
+                        </div>
             </form>
-
+                        
         </div>
+        
     );
 }

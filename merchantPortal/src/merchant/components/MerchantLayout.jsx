@@ -44,7 +44,14 @@ export default function MerchantLayout() {
                         {"Store Title: "+merchant?.storeName || "Marketplace Merchant"}
                     </div>
                 </div>
+                <a
+                    href="http://localhost:5174"
+                    className="admin-nav-link"
+                >
 
+                    Customer View
+
+                </a>
                
                 <div className="admin-user-card">
 
