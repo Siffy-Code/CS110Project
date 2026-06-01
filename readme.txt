@@ -1,12 +1,17 @@
 CS110 Marketplace - group project
 =================================
 
+Each app must be run separately, so you will need 4 terminals to run our project
+Each app is on a different server host and links together in that way directly by structure
+(Integration strategy by Peter)
+
 Folders
 -------
-  merchantPortal/   Merchant-side React app (Job A/B teammate).
-  adminPortal/      Admin React app (Job C - Nathan).
-  server/           Node.js + Express + MongoDB API (Job C - Nathan).
-  Links/            Shared Drive link.
+  merchantPortal/   Merchant-side React app (Peter)
+  customerPortal/   Customer-side React app (Kevin)
+  adminPortal/      Admin React app (Nathan)
+  server/           Node.js + Express + MongoDB API (Nathan)
+  Links/            Shared Drive link
 
 Job C (Database / Admin) - what's in here
 -----------------------------------------
@@ -37,9 +42,12 @@ How to run (local, quick-start)
      npm run dev      # http://localhost:5050
 
   2. cd adminPortal && npm install && npm run dev
-     # http://localhost:5174   (proxies /api to the backend)
+     # http://localhost:5175   (proxies /api to the backend)
      
   3. cd customerPortal && npm install && npm run dev
+     # http://localhost:5174   (proxies /api to the backend)
+  
+  4. cd merchantPortal && npm install && npm run dev
      # http://localhost:5173   (proxies /api to the backend)
 ==================================================
 EXPANDED DETAILS AND INSTRUCTIONS (*NOT* THE TLDR)
