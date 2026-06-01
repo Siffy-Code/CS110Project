@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
 const { requireAuth } = require("../middleware/auth");
-
+const Merchant = require("../models/Merchant");
 const router = express.Router();
 
 function signToken(user) {
@@ -34,7 +34,20 @@ router.post("/register", async (req, res) => {
         const user = new User({ name, email: email.toLowerCase(), role: safeRole });
         await user.setPassword(password);
         await user.save();
-
+        if (safeRole === "merchant"){
+            await Merchant.create({
+                owner:
+                    user._id,
+                storeName:
+                    `${name}'s Store`,
+                description:
+                    "",
+                categories:
+                    [],
+                isApproved:
+                    true,
+            });
+        }
         return res.status(201).json({
             token: signToken(user),
             user: user.toSafeJSON(),
