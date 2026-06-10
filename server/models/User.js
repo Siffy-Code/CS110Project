@@ -34,6 +34,13 @@ const userSchema = new mongoose.Schema(
             ref: "Merchant",
             default: null,
         },
+        // Populated only when role === "customer".
+        favorites: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Merchant",
+            },
+        ],
     },
     { timestamps: true }
 );

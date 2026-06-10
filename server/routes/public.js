@@ -11,7 +11,10 @@ router.get("/listings", async (req, res) => {
     const { category, merchant } = req.query;
     const filter = { isActive: true };
 
-    if (category) filter.category = category;
+    if (category) {
+        const cat = await Category.findOne({ slug: category });
+        if (cat) filter.category = cat._id;
+    }
     if (merchant) filter.merchant = merchant;
 
     const listings = await Listing.find(filter)

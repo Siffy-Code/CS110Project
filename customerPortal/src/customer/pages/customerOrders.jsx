@@ -1,34 +1,65 @@
+import React, { useEffect, useState } from "react";
+import { api } from "../api.js";
 import "../styles/customer.css";
-
-const PLACEHOLDER_ORDERS = [
-    { id: "ORD-001", title: "GPU Batch Processing", merchant: "TechRig Solutions", total: "$1.20", status: "Completed", date: "2025-05-10" },
-    { id: "ORD-002", title: "Malware Scan & Removal", merchant: "SecureBox Co.", total: "$25.00", status: "In Progress", date: "2025-05-18" },
-    { id: "ORD-003", title: "Overnight CPU Rental", merchant: "NightOwl Compute", total: "$0.40", status: "Completed", date: "2025-05-01" },
-];
 
 export default function CustomerOrders() {
 
+    const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        loadOrders();
+    }, []);
+
+    async function loadOrders() {
+        try {
+            const res = await api.customerOrders();
+            setOrders(res.orders || []);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    if (loading) {
+        return (
+            <div className="page-container">
+                <h1 className="page-header">My Orders</h1>
+                <p className="subtext">Loading...</p>
+            </div>
+        );
+    }
+
     return (
-
         <div className="page-container">
-
-            <button className="secondary-button back-button">← Dashboard</button>
 
             <h1 className="page-header">My Orders</h1>
 
+            {error && <div className="form-error">{error}</div>}
+
+            {!error && orders.length === 0 && (
+                <p className="subtext">No orders yet.</p>
+            )}
+
             <div className="data-list">
-                {PLACEHOLDER_ORDERS.map((order) => (
-                    <div key={order.id} className="data-row">
+                {orders.map((order) => (
+                    <div key={order._id} className="data-row">
 
                         <div className="data-row-left">
-                            <span className="data-row-title">{order.title}</span>
-                            <span className="data-row-subtext">{order.merchant} · {order.date}</span>
+                            <span className="data-row-title">
+                                {order.listing?.title || "Order"}
+                            </span>
+                            <span className="data-row-subtext">
+                                {order.merchant?.storeName || "—"} ·{" "}
+                                {order.createdAt ? order.createdAt.slice(0, 10) : "—"}
+                            </span>
                         </div>
 
                         <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-                            <span>{order.total}</span>
+                            <span>${(order.priceAtPurchase || 0).toFixed(2)}</span>
                             <span className="status-tag">{order.status}</span>
-                            <button className="secondary-button">Details</button>
                         </div>
 
                     </div>

@@ -1,48 +1,94 @@
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { api } from "../api.js";
 import "../styles/customer.css";
 
-const PLACEHOLDER_LISTINGS = [
-    { id: 1, title: "GPU Batch Processing", price: "$0.12 / hr" },
-    { id: 2, title: "Dataset ETL Pipeline", price: "$0.20 / hr" },
-    { id: 3, title: "Overnight CPU Rental", price: "$0.05 / hr" },
-];
-
-const PLACEHOLDER_REVIEWS = [
-    { id: 1, author: "customer123", rating: "★★★★★", comment: "Fast turnaround, great service." },
-    { id: 2, author: "poweruser99", rating: "★★★★☆", comment: "Good results, communication was solid." },
-];
-
 export default function CustomerMerchantProfile() {
+    const { id } = useParams();
+    const navigate = useNavigate();
+
+    const [listings, setListings] = useState([]);
+    const [merchantName, setMerchantName] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+    const [reviewRating, setReviewRating] = useState("5");
+    const [reviewComment, setReviewComment] = useState("");
+
+    useEffect(() => {
+        loadMerchantListings();
+    }, [id]);
+
+    async function loadMerchantListings() {
+        setLoading(true);
+        try {
+            const res = await api.publicListings({ merchant: id });
+            const items = res.listings || [];
+            setListings(items);
+            if (items.length > 0) {
+                setMerchantName(items[0].merchant?.storeName || "Merchant");
+            }
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    function handleMessageMerchant() {
+        navigate("/messages");
+    }
+
+    function handleSubmitReview(e) {
+        e.preventDefault();
+        alert("Reviews are not yet connected to the backend.");
+        setReviewComment("");
+    }
+
+    if (loading) return <div className="page-container"><p className="subtext">Loading...</p></div>;
 
     return (
-
         <div className="page-container">
 
-            <button className="secondary-button back-button">← Back to Browse</button>
+            <button
+                className="secondary-button back-button"
+                onClick={() => navigate("/browse")}
+            >
+                ← Back to Browse
+            </button>
 
             <div className="merchant-banner">
-                🏪 TechRig Solutions
+                🏪 {merchantName || "Merchant Profile"}
             </div>
+
+            {error && <p className="form-error">{error}</p>}
 
             <div className="two-column-layout">
 
                 <div className="left-panel">
 
-                    <div className="merchant-info-card">
+                    <div className="merchant-info-card info-box">
                         <h2 className="section-header">About</h2>
-                        <p className="subtext">High-performance compute rentals for data pipelines, ML training, and batch jobs.</p>
-                        <p className="subtext">Contact: merchant@techrigs.com</p>
+                        <p className="subtext">
+                            Compute and processing services offered on the marketplace.
+                        </p>
                     </div>
 
-                    <div className="merchant-info-card">
+                    <div className="merchant-info-card info-box">
                         <h2 className="section-header">Rating</h2>
                         <div className="rating-row">
                             <span className="stars-placeholder">★★★★☆</span>
-                            <span className="subtext">4.2 / 5</span>
+                            <span className="subtext">—</span>
                         </div>
-                        <p className="subtext">Based on 24 reviews</p>
+                        <p className="subtext">Reviews not yet connected.</p>
                     </div>
 
-                    <button className="primary-button">Message Merchant</button>
+                    <button
+                        className="primary-button"
+                        onClick={handleMessageMerchant}
+                        style={{ width: "100%" }}
+                    >
+                        Message Merchant
+                    </button>
 
                 </div>
 
@@ -50,17 +96,38 @@ export default function CustomerMerchantProfile() {
 
                     <h2 className="section-header">Listings</h2>
 
+                    {listings.length === 0 && (
+                        <p className="subtext">No active listings.</p>
+                    )}
+
                     <div className="listings-grid" style={{ marginBottom: "30px" }}>
-                        {PLACEHOLDER_LISTINGS.map((listing) => (
-                            <div key={listing.id} className="listing-card">
+                        {listings.map((listing) => (
+                            <div key={listing._id} className="listing-card">
 
                                 <div className="listing-image">No Image</div>
 
                                 <div className="listing-content">
                                     <div className="listing-title">{listing.title}</div>
-                                    <div className="listing-price">{listing.price}</div>
-                                    <div style={{ marginTop: "10px" }}>
-                                        <button className="secondary-button">Add to Cart</button>
+                                    <div className="listing-price">
+                                        ${listing.price?.toFixed(2)} {listing.priceUnit || ""}
+                                    </div>
+                                    <div style={{ marginTop: "10px", display: "flex", gap: "8px" }}>
+                                        <button
+                                            className="primary-button"
+                                            onClick={() =>
+                                                navigate(`/browse/listing/${listing._id}`)
+                                            }
+                                        >
+                                            View
+                                        </button>
+                                        <button
+                                            className="secondary-button"
+                                            onClick={() =>
+                                                alert("Payment processing is disabled for this demo.")
+                                            }
+                                        >
+                                            Add to Cart
+                                        </button>
                                     </div>
                                 </div>
 
@@ -68,39 +135,36 @@ export default function CustomerMerchantProfile() {
                         ))}
                     </div>
 
-                    <h2 className="section-header">Reviews</h2>
+                    <h2 className="section-header">Leave a Review</h2>
 
-                    <div className="data-list">
-                        {PLACEHOLDER_REVIEWS.map((review) => (
-                            <div key={review.id} className="data-row">
-                                <div className="data-row-left">
-                                    <span className="data-row-title">{review.rating} — {review.author}</span>
-                                    <span className="data-row-subtext">{review.comment}</span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div style={{ marginTop: "20px" }}>
-                        <h2 className="section-header">Leave a Review</h2>
-                        <div className="form-container">
-                            <div className="form-group">
-                                <label>Rating</label>
-                                <select className="dropdown-input">
-                                    <option>★★★★★ — 5</option>
-                                    <option>★★★★☆ — 4</option>
-                                    <option>★★★☆☆ — 3</option>
-                                    <option>★★☆☆☆ — 2</option>
-                                    <option>★☆☆☆☆ — 1</option>
-                                </select>
-                            </div>
-                            <div className="form-group">
-                                <label>Comment</label>
-                                <textarea className="text-area" placeholder="Share your experience..." />
-                            </div>
-                            <button className="primary-button">Submit Review</button>
+                    <form className="form-container" onSubmit={handleSubmitReview}>
+                        <div className="form-group">
+                            <label>Rating</label>
+                            <select
+                                className="dropdown-input"
+                                value={reviewRating}
+                                onChange={(e) => setReviewRating(e.target.value)}
+                            >
+                                <option value="5">★★★★★ — 5</option>
+                                <option value="4">★★★★☆ — 4</option>
+                                <option value="3">★★★☆☆ — 3</option>
+                                <option value="2">★★☆☆☆ — 2</option>
+                                <option value="1">★☆☆☆☆ — 1</option>
+                            </select>
                         </div>
-                    </div>
+                        <div className="form-group">
+                            <label>Comment</label>
+                            <textarea
+                                className="text-area"
+                                placeholder="Share your experience..."
+                                value={reviewComment}
+                                onChange={(e) => setReviewComment(e.target.value)}
+                            />
+                        </div>
+                        <button type="submit" className="primary-button">
+                            Submit Review
+                        </button>
+                    </form>
 
                 </div>
 
