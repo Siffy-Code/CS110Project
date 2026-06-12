@@ -92,7 +92,7 @@ export default function CustomerMessageDetails() {
                             }}
                         >
                             <div className="subtext" style={{ marginBottom: "4px" }}>
-                                {isMe ? "You" : (msg.senderName || "Them")} ·{" "}
+                                {isMe ? "You" : (conversation?.merchant?.storeName || msg.senderName || "Them")} ·{" "}
                                 {(msg.createdAt || "").slice(0, 16).replace("T", " ")}
                             </div>
                             <div

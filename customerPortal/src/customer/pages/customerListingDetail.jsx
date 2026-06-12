@@ -53,7 +53,13 @@ export default function CustomerListingDetail() {
             </button>
 
             <div className="listing-image" style={{ maxWidth: "600px", height: "240px" }}>
-                No Image
+                {listing.imageUrl && (
+                    <img
+                        src={listing.imageUrl}
+                        alt={listing.title}
+                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                )}
             </div>
 
             <div style={{ maxWidth: "600px", marginTop: "20px" }}>
