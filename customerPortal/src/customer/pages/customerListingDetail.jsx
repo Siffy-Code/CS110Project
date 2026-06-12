@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../api.js";
+import { useCart } from "../CartContext.jsx";
 import "../styles/customer.css";
 
 export default function CustomerListingDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { addToCart } = useCart();
 
     const [listing, setListing] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [added, setAdded] = useState(false);
 
     useEffect(() => {
         loadListing();
@@ -18,7 +21,6 @@ export default function CustomerListingDetail() {
     async function loadListing() {
         setLoading(true);
         try {
-            // Fetch all listings then find by id (public endpoint doesn't have single-listing route)
             const res = await api.publicListings();
             const found = (res.listings || []).find((l) => l._id === id);
             if (!found) throw new Error("Listing not found.");
@@ -28,6 +30,12 @@ export default function CustomerListingDetail() {
         } finally {
             setLoading(false);
         }
+    }
+
+    function handleAddToCart() {
+        addToCart(listing);
+        setAdded(true);
+        setTimeout(() => setAdded(false), 1500);
     }
 
     if (loading) return <div className="page-container"><p className="subtext">Loading...</p></div>;
@@ -62,9 +70,7 @@ export default function CustomerListingDetail() {
                         Category: {listing.category?.name || "—"}
                     </div>
                     {listing.description && (
-                        <div className="profile-row">
-                            {listing.description}
-                        </div>
+                        <div className="profile-row">{listing.description}</div>
                     )}
                 </div>
 
@@ -74,17 +80,15 @@ export default function CustomerListingDetail() {
                     <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
                         <button
                             className="primary-button"
-                            onClick={() =>
-                                navigate(`/browse/merchant/${listing.merchant?._id}`)
-                            }
+                            onClick={() => navigate(`/browse/merchant/${listing.merchant?._id}`)}
                         >
                             View Profile
                         </button>
                         <button
-                            className="secondary-button"
-                            onClick={() => alert("Payment processing is disabled for this demo.")}
+                            className={added ? "primary-button" : "secondary-button"}
+                            onClick={handleAddToCart}
                         >
-                            Add to Cart
+                            {added ? "Added!" : "Add to Cart"}
                         </button>
                     </div>
                 </div>

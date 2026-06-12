@@ -3,6 +3,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import { AuthProvider } from "./customer/AuthContext.jsx";
+import { CartProvider } from "./customer/CartContext.jsx";
 import ProtectedRoute from "./customer/components/ProtectedRoute.jsx";
 import CustomerLayout from "./customer/components/CustomerLayout.jsx";
 
@@ -23,84 +24,42 @@ function App() {
     return (
 
         <AuthProvider>
+            <CartProvider>
 
-            <BrowserRouter>
+                <BrowserRouter>
 
-                <Routes>
+                    <Routes>
 
-                    <Route
-                        path="/login"
-                        element={<CustomerLogin />}
-                    />
-                    <Route
-                        path="/register"
-                        element={<CustomerRegister />}
-                    />
-
-                    <Route
-                        element={
-                            <ProtectedRoute>
-                                <CustomerLayout />
-                            </ProtectedRoute>
-                        }
-                    >
+                        <Route path="/login" element={<CustomerLogin />} />
+                        <Route path="/register" element={<CustomerRegister />} />
 
                         <Route
-                            path="/"
-                            element={<CustomerDashboard />}
-                        />
+                            element={
+                                <ProtectedRoute>
+                                    <CustomerLayout />
+                                </ProtectedRoute>
+                            }
+                        >
 
-                        <Route
-                            path="/browse"
-                            element={<CustomerBrowse />}
-                        />
+                            <Route path="/" element={<CustomerDashboard />} />
+                            <Route path="/browse" element={<CustomerBrowse />} />
+                            <Route path="/browse/listing/:id" element={<CustomerListingDetail />} />
+                            <Route path="/browse/merchant/:id" element={<CustomerMerchantProfile />} />
+                            <Route path="/orders" element={<CustomerOrders />} />
+                            <Route path="/messages" element={<CustomerMessageBoard />} />
+                            <Route path="/messages/:id" element={<CustomerMessageDetails />} />
+                            <Route path="/favorites" element={<CustomerFavorites />} />
+                            <Route path="/cart" element={<CustomerCart />} />
 
-                        <Route
-                            path="/browse/listing/:id"
-                            element={<CustomerListingDetail />}
-                        />
+                        </Route>
 
-                        <Route
-                            path="/browse/merchant/:id"
-                            element={<CustomerMerchantProfile />}
-                        />
+                        <Route path="*" element={<Navigate to="/" replace />} />
 
-                        <Route
-                            path="/orders"
-                            element={<CustomerOrders />}
-                        />
+                    </Routes>
 
-                        <Route
-                            path="/messages"
-                            element={<CustomerMessageBoard />}
-                        />
+                </BrowserRouter>
 
-                        <Route
-                            path="/messages/:id"
-                            element={<CustomerMessageDetails />}
-                        />
-
-                        <Route
-                            path="/favorites"
-                            element={<CustomerFavorites />}
-                        />
-
-                        <Route
-                            path="/cart"
-                            element={<CustomerCart />}
-                        />
-
-                    </Route>
-
-                    <Route
-                        path="*"
-                        element={<Navigate to="/" replace />}
-                    />
-
-                </Routes>
-
-            </BrowserRouter>
-
+            </CartProvider>
         </AuthProvider>
     );
 }

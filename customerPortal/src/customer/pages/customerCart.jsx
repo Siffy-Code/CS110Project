@@ -1,24 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../CartContext.jsx";
 import "../styles/customer.css";
 
 export default function CustomerCart() {
     const navigate = useNavigate();
-    const [cart, setCart] = useState([]);
-
-    function removeItem(id) {
-        setCart((prev) => prev.filter((item) => item.id !== id));
-    }
-
-    function updateQty(id, delta) {
-        setCart((prev) =>
-            prev
-                .map((item) =>
-                    item.id === id ? { ...item, qty: item.qty + delta } : item
-                )
-                .filter((item) => item.qty > 0)
-        );
-    }
+    const { cart, removeFromCart, updateQty } = useCart();
 
     const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
@@ -75,7 +62,7 @@ export default function CustomerCart() {
                                     </span>
                                     <button
                                         className="secondary-button"
-                                        onClick={() => removeItem(item.id)}
+                                        onClick={() => removeFromCart(item.id)}
                                     >
                                         Remove
                                     </button>

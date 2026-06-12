@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api.js";
+import { useCart } from "../CartContext.jsx";
 import "../styles/customer.css";
 
 export default function CustomerBrowse() {
     const navigate = useNavigate();
+    const { addToCart } = useCart();
 
     const [listings, setListings] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -12,6 +14,7 @@ export default function CustomerBrowse() {
     const [searchText, setSearchText] = useState("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [added, setAdded] = useState({});
 
     useEffect(() => {
         loadData();
@@ -46,6 +49,14 @@ export default function CustomerBrowse() {
         }
     }
 
+    function handleAddToCart(listing) {
+        addToCart(listing);
+        setAdded((prev) => ({ ...prev, [listing._id]: true }));
+        setTimeout(() => {
+            setAdded((prev) => ({ ...prev, [listing._id]: false }));
+        }, 1500);
+    }
+
     const filtered = searchText
         ? listings.filter(
               (l) =>
@@ -73,11 +84,7 @@ export default function CustomerBrowse() {
 
             <div className="filter-row">
                 <button
-                    className={
-                        selectedCategory === ""
-                            ? "primary-button"
-                            : "secondary-button"
-                    }
+                    className={selectedCategory === "" ? "primary-button" : "secondary-button"}
                     onClick={() => filterByCategory("")}
                 >
                     All
@@ -85,11 +92,7 @@ export default function CustomerBrowse() {
                 {categories.map((cat) => (
                     <button
                         key={cat._id}
-                        className={
-                            selectedCategory === cat.slug
-                                ? "primary-button"
-                                : "secondary-button"
-                        }
+                        className={selectedCategory === cat.slug ? "primary-button" : "secondary-button"}
                         onClick={() => filterByCategory(cat.slug)}
                     >
                         {cat.name}
@@ -99,7 +102,6 @@ export default function CustomerBrowse() {
 
             {loading && <p className="subtext">Loading listings...</p>}
             {error && <p className="form-error">{error}</p>}
-
             {!loading && filtered.length === 0 && (
                 <p className="subtext">No listings found.</p>
             )}
@@ -113,8 +115,7 @@ export default function CustomerBrowse() {
                         <div className="listing-content">
                             <div className="listing-title">{listing.title}</div>
                             <div className="listing-price">
-                                ${listing.price?.toFixed(2)}{" "}
-                                {listing.priceUnit || ""}
+                                ${listing.price?.toFixed(2)} {listing.priceUnit || ""}
                             </div>
                             <div className="listing-merchant">
                                 {listing.merchant?.storeName || "Unknown Merchant"}
@@ -122,21 +123,21 @@ export default function CustomerBrowse() {
                             <div style={{ marginTop: "12px", display: "flex", gap: "8px" }}>
                                 <button
                                     className="primary-button"
-                                    onClick={() =>
-                                        navigate(`/browse/listing/${listing._id}`)
-                                    }
+                                    onClick={() => navigate(`/browse/listing/${listing._id}`)}
                                 >
                                     View
                                 </button>
                                 <button
                                     className="secondary-button"
-                                    onClick={() =>
-                                        navigate(
-                                            `/browse/merchant/${listing.merchant?._id}`
-                                        )
-                                    }
+                                    onClick={() => navigate(`/browse/merchant/${listing.merchant?._id}`)}
                                 >
                                     Merchant
+                                </button>
+                                <button
+                                    className={added[listing._id] ? "primary-button" : "secondary-button"}
+                                    onClick={() => handleAddToCart(listing)}
+                                >
+                                    {added[listing._id] ? "Added!" : "Add to Cart"}
                                 </button>
                             </div>
                         </div>
