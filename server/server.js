@@ -9,6 +9,7 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
 const merchantRoutes = require("./routes/merchant");
+const customerRoutes = require("./routes/customer");
 const publicRoutes = require("./routes/public");
 
 const app = express();
@@ -24,6 +25,7 @@ app.get("/api/health", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/merchant", merchantRoutes);
+app.use("/api/customer", customerRoutes);
 app.use("/api", publicRoutes);
 
 app.use((req, res) => {

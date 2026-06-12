@@ -13,6 +13,8 @@ body {
 .page-container {
     min-height: 100vh;
     padding: 20px;
+    box-sizing: border-box;
+    width: 100%;
 }
 
 .page-header {
@@ -35,14 +37,17 @@ body {
 /* ========================================= */
 
 .dashboard-grid {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .dashboard-card {
-    width: 250px;
-    height: 180px;
+    height: 200px;
+    padding: 20px;
+    text-align: center;
 
     display: flex;
     flex-direction: column;
@@ -390,5 +395,234 @@ body {
 
     .service-option-card {
         flex-direction: column;
+    }
+}
+/* ========================================= */
+/* SIDEBAR LAYOUT (mirrored from merchant)   */
+/* ========================================= */
+
+.admin-shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+.admin-sidebar {
+    width: 240px;
+    background-color: #222;
+    border-right: 1px solid #444;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 10px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.admin-brand {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.admin-brand-sub {
+    font-size: 12px;
+    opacity: 0.7;
+    margin-top: 4px;
+}
+
+.admin-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.admin-nav-link {
+    text-decoration: none;
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: 0.15s;
+}
+
+.admin-nav-link:hover {
+    background-color: #444;
+}
+
+.admin-nav-link.active {
+    background-color: #5a5a5a;
+}
+
+.admin-main {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.admin-user-card {
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid #444;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.admin-user-name {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.admin-user-email {
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.admin-logout-btn {
+    width: 100%;
+}
+
+/* ========================================= */
+/* SEARCH BAR / FILTER ROW                   */
+/* ========================================= */
+
+.search-bar-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.search-input {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid #666;
+    background-color: #444;
+    color: white;
+    font-size: 14px;
+}
+
+.filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* ========================================= */
+/* STATUS TAG                                */
+/* ========================================= */
+
+.status-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    background-color: #5a5a5a;
+    border: 1px solid #777;
+}
+
+/* ========================================= */
+/* LISTING PRICE / MERCHANT LABEL            */
+/* ========================================= */
+
+.listing-price {
+    font-size: 18px;
+    color: #ccc;
+    margin-bottom: 6px;
+}
+
+.listing-merchant {
+    font-size: 13px;
+    opacity: 0.75;
+}
+
+/* ========================================= */
+/* MERCHANT PROFILE PAGE                     */
+/* ========================================= */
+
+.merchant-banner {
+    background-color: #3a3a3a;
+    border: 1px solid #5a5a5a;
+    border-radius: 10px;
+    padding: 30px 20px;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+.merchant-info-card {
+    margin-bottom: 20px;
+}
+
+.rating-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.stars-placeholder {
+    font-size: 18px;
+    letter-spacing: 2px;
+}
+
+/* ========================================= */
+/* FORM ERROR                                */
+/* ========================================= */
+
+.form-error {
+    color: #f08080;
+    font-size: 14px;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #3a2a2a;
+    border-radius: 6px;
+    border: 1px solid #804040;
+}
+
+/* ========================================= */
+/* LOGIN EXTRAS                              */
+/* ========================================= */
+
+.login-switch {
+    margin-top: 20px;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.login-switch a,
+.login-switch a:visited {
+    color: #aaaaff;
+    cursor: pointer;
+}
+
+.login-submit {
+    width: 100%;
+    margin-top: 5px;
+}
+
+/* ========================================= */
+/* RESPONSIVE SIDEBAR                        */
+/* ========================================= */
+
+@media (max-width: 700px) {
+    .admin-shell {
+        flex-direction: column;
+    }
+
+    .admin-sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 10px;
+    }
+
+    .admin-user-card {
+        display: none;
     }
 }
