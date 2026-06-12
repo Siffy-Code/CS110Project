@@ -296,6 +296,21 @@ router.get("/listings", async (req, res) => {
     res.json({ listings });
 });
 
+router.get("/listings/:id", async (req, res) => {
+    if (!isValidId(req.params.id)) {
+        return res.status(400).json({ error: "Invalid listing id" });
+    }
+
+    const listing = await Listing.findById(req.params.id)
+        .populate("merchant", "storeName isActive contactEmail description")
+        .populate("category", "name slug")
+        .populate("deactivatedBy", "name email");
+
+    if (!listing) return res.status(404).json({ error: "Listing not found" });
+
+    res.json({ listing });
+});
+
 router.post("/listings", async (req, res) => {
     const { merchant, title, description, price, category, kind, imageUrl } =
         req.body;

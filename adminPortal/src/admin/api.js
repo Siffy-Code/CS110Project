@@ -77,6 +77,7 @@ export const api = {
         const qs = new URLSearchParams(params).toString();
         return request(`/admin/listings${qs ? `?${qs}` : ""}`);
     },
+    getListing: (id) => request(`/admin/listings/${id}`),
     createListing: (payload) =>
         request("/admin/listings", { method: "POST", body: payload }),
     deactivateListing: (id, reason = "") =>
