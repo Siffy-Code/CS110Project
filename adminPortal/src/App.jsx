@@ -9,6 +9,7 @@ import AdminDashboard from "./admin/pages/AdminDashboard.jsx";
 import AdminUsers from "./admin/pages/AdminUsers.jsx";
 import AdminMerchants from "./admin/pages/AdminMerchants.jsx";
 import AdminListings from "./admin/pages/AdminListings.jsx";
+import AdminListingDetail from "./admin/pages/AdminListingDetail.jsx";
 import AdminCategories from "./admin/pages/AdminCategories.jsx";
 import AdminLogs from "./admin/pages/AdminLogs.jsx";
 
@@ -30,6 +31,7 @@ export default function App() {
                         <Route path="/users" element={<AdminUsers />} />
                         <Route path="/merchants" element={<AdminMerchants />} />
                         <Route path="/listings" element={<AdminListings />} />
+                        <Route path="/listings/:id" element={<AdminListingDetail />} />
                         <Route path="/categories" element={<AdminCategories />} />
                         <Route path="/logs" element={<AdminLogs />} />
                     </Route>

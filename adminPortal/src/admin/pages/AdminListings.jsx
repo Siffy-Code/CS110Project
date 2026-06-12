@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { api } from "../api";
 import DataRow from "../components/DataRow.jsx";
 import ConfirmModal from "../components/ConfirmModal.jsx";
@@ -151,7 +152,14 @@ export default function AdminListings() {
                     listings.map((l) => (
                         <DataRow
                             key={l._id}
-                            title={`${l.title} - $${l.price}`}
+                            title={
+                                <Link
+                                    to={`/listings/${l._id}`}
+                                    className="data-row-link"
+                                >
+                                    {`${l.title} - $${l.price}`}
+                                </Link>
+                            }
                             subtext={
                                 <>
                                     {l.merchant?.storeName || "Unknown merchant"}
@@ -168,6 +176,12 @@ export default function AdminListings() {
                             }
                             actions={
                                 <>
+                                    <Link
+                                        to={`/listings/${l._id}`}
+                                        className="secondary-button row-link-button"
+                                    >
+                                        View
+                                    </Link>
                                     {l.isActive ? (
                                         <button
                                             className="primary-button danger"
