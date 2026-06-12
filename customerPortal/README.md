@@ -8,7 +8,6 @@ React + Vite app for marketplace customers. Talks to the Node.js API in
 Run these in order:
 
 1. Install and start the backend:
-
    ```bash
    cd server
    npm install
@@ -16,14 +15,12 @@ Run these in order:
    ```
 
 2. Seed the database (in a new terminal, while the server is running):
-
    ```bash
    cd server
    npm run seed
    ```
 
 3. Install and start the customer portal:
-
    ```bash
    cd customerPortal
    npm install
