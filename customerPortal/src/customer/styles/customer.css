@@ -491,7 +491,7 @@ body {
     display: flex;
     gap: 10px;
     margin-bottom: 15px;
-    max-width: 600px;
+    width: 100%;
 }
 
 .search-input {

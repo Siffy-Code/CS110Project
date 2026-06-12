@@ -80,7 +80,7 @@ export default function CustomerMessageDetails() {
 
             {error && <div className="form-error">{error}</div>}
 
-            <div className="info-box" style={{ maxWidth: "700px", marginBottom: "20px" }}>
+            <div className="info-box" style={{ marginBottom: "20px" }}>
                 {messages.map((msg) => {
                     const isMe = msg.direction === "TO";
                     return (
@@ -114,7 +114,7 @@ export default function CustomerMessageDetails() {
             </div>
 
             <form
-                style={{ display: "flex", gap: "10px", maxWidth: "700px" }}
+                style={{ display: "flex", gap: "10px" }}
                 onSubmit={handleSend}
             >
                 <input
