@@ -221,7 +221,17 @@ export default function CustomerMerchantProfile() {
                         {listings.map((listing) => (
                             <div key={listing._id} className="listing-card">
 
-                                <div className="listing-image">No Image</div>
+                                <div className="listing-image">
+                                    {listing.imageUrl ? (
+                                        <img
+                                            src={listing.imageUrl}
+                                            alt={listing.title}
+                                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                        />
+                                    ) : (
+                                        "No Image"
+                                    )}
+                                </div>
 
                                 <div className="listing-content">
                                     <div className="listing-title">{listing.title}</div>
