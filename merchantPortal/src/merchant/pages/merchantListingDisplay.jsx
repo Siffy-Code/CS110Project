@@ -399,7 +399,7 @@ export default function MerchantListingDisplay() {
                                 >
 
                                     <Link
-                                        to="/edit-services"
+                                        to="/editservices"
                                         className="primary-button"
                                     >
 
