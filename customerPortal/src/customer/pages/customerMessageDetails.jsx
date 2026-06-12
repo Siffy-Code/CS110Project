@@ -72,12 +72,17 @@ export default function CustomerMessageDetails() {
             </button>
 
             <h1 className="page-header">{title}</h1>
+            {conversation?.merchant?.storeName && (
+                <p className="subtext" style={{ marginTop: "-10px", marginBottom: "15px" }}>
+                    Merchant: {conversation.merchant.storeName}
+                </p>
+            )}
 
             {error && <div className="form-error">{error}</div>}
 
             <div className="info-box" style={{ maxWidth: "700px", marginBottom: "20px" }}>
                 {messages.map((msg) => {
-                    const isMe = msg.senderRole === "customer";
+                    const isMe = msg.direction === "TO";
                     return (
                         <div
                             key={msg._id}

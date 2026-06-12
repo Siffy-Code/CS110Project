@@ -29,7 +29,7 @@ export default function CustomerMessageBoard() {
     const filtered = searchText
         ? conversations.filter((c) =>
               (c.subject || "").toLowerCase().includes(searchText.toLowerCase()) ||
-              (c.merchantName || "").toLowerCase().includes(searchText.toLowerCase())
+              (c.merchant?.storeName || "").toLowerCase().includes(searchText.toLowerCase())
           )
         : conversations;
 
@@ -76,7 +76,7 @@ export default function CustomerMessageBoard() {
                                 {thread.subject || "Conversation"}
                             </span>
                             <span className="data-row-subtext">
-                                {thread.lastMessage || ""}
+                                {thread.merchant?.storeName || ""}
                             </span>
                         </div>
                         <span className="subtext">

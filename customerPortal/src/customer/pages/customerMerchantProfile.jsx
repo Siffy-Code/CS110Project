@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../api.js";
+import { useCart } from "../CartContext.jsx";
 import "../styles/customer.css";
 
 export default function CustomerMerchantProfile() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { addToCart } = useCart();
 
     const [listings, setListings] = useState([]);
     const [merchantName, setMerchantName] = useState("");
@@ -14,8 +16,23 @@ export default function CustomerMerchantProfile() {
     const [reviewRating, setReviewRating] = useState("5");
     const [reviewComment, setReviewComment] = useState("");
 
+    // Favorite state
+    const [favorited, setFavorited] = useState(false);
+    const [favLoading, setFavLoading] = useState(false);
+
+    // Message form state
+    const [showMessageForm, setShowMessageForm] = useState(false);
+    const [msgSubject, setMsgSubject] = useState("");
+    const [msgContent, setMsgContent] = useState("");
+    const [msgSending, setMsgSending] = useState(false);
+    const [msgError, setMsgError] = useState("");
+
+    // Cart added feedback
+    const [added, setAdded] = useState({});
+
     useEffect(() => {
         loadMerchantListings();
+        loadFavoriteStatus();
     }, [id]);
 
     async function loadMerchantListings() {
@@ -34,8 +51,61 @@ export default function CustomerMerchantProfile() {
         }
     }
 
-    function handleMessageMerchant() {
-        navigate("/messages");
+    async function loadFavoriteStatus() {
+        try {
+            const res = await api.customerFavorites();
+            const favs = res.favorites || [];
+            setFavorited(favs.some((f) => f._id === id));
+        } catch {
+            // silently ignore
+        }
+    }
+
+    async function handleToggleFavorite() {
+        setFavLoading(true);
+        try {
+            if (favorited) {
+                await api.removeFavorite(id);
+                setFavorited(false);
+            } else {
+                await api.addFavorite(id);
+                setFavorited(true);
+            }
+        } catch (err) {
+            alert(err.message);
+        } finally {
+            setFavLoading(false);
+        }
+    }
+
+    async function handleSendMessage(e) {
+        e.preventDefault();
+        if (!msgSubject.trim() || !msgContent.trim()) return;
+        setMsgSending(true);
+        setMsgError("");
+        try {
+            const res = await api.createConversation({
+                merchantId: id,
+                subject: msgSubject.trim(),
+                content: msgContent.trim(),
+            });
+            setShowMessageForm(false);
+            setMsgSubject("");
+            setMsgContent("");
+            navigate(`/messages/${res.conversation._id}`);
+        } catch (err) {
+            setMsgError(err.message);
+        } finally {
+            setMsgSending(false);
+        }
+    }
+
+    function handleAddToCart(listing) {
+        addToCart(listing);
+        setAdded((prev) => ({ ...prev, [listing._id]: true }));
+        setTimeout(() => {
+            setAdded((prev) => ({ ...prev, [listing._id]: false }));
+        }, 1500);
     }
 
     function handleSubmitReview(e) {
@@ -84,11 +154,58 @@ export default function CustomerMerchantProfile() {
 
                     <button
                         className="primary-button"
-                        onClick={handleMessageMerchant}
+                        onClick={() => setShowMessageForm((prev) => !prev)}
+                        style={{ width: "100%", marginBottom: "10px" }}
+                    >
+                        {showMessageForm ? "Cancel" : "Message Merchant"}
+                    </button>
+
+                    <button
+                        className={favorited ? "primary-button" : "secondary-button"}
+                        onClick={handleToggleFavorite}
+                        disabled={favLoading}
                         style={{ width: "100%" }}
                     >
-                        Message Merchant
+                        {favorited ? "★ Favorited" : "☆ Add to Favorites"}
                     </button>
+
+                    {showMessageForm && (
+                        <div className="info-box" style={{ marginTop: "15px" }}>
+                            <h2 className="section-header">New Message</h2>
+                            {msgError && <p className="form-error">{msgError}</p>}
+                            <form onSubmit={handleSendMessage}>
+                                <div className="form-group">
+                                    <label>Subject</label>
+                                    <input
+                                        className="text-input"
+                                        type="text"
+                                        placeholder="What's this about?"
+                                        value={msgSubject}
+                                        onChange={(e) => setMsgSubject(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Message</label>
+                                    <textarea
+                                        className="text-area"
+                                        placeholder="Write your message..."
+                                        value={msgContent}
+                                        onChange={(e) => setMsgContent(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <button
+                                    type="submit"
+                                    className="primary-button"
+                                    disabled={msgSending}
+                                    style={{ width: "100%" }}
+                                >
+                                    {msgSending ? "Sending..." : "Send"}
+                                </button>
+                            </form>
+                        </div>
+                    )}
 
                 </div>
 
@@ -121,12 +238,10 @@ export default function CustomerMerchantProfile() {
                                             View
                                         </button>
                                         <button
-                                            className="secondary-button"
-                                            onClick={() =>
-                                                alert("Payment processing is disabled for this demo.")
-                                            }
+                                            className={added[listing._id] ? "primary-button" : "secondary-button"}
+                                            onClick={() => handleAddToCart(listing)}
                                         >
-                                            Add to Cart
+                                            {added[listing._id] ? "Added!" : "Add to Cart"}
                                         </button>
                                     </div>
                                 </div>
