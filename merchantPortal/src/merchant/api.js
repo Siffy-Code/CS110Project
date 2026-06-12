@@ -1,5 +1,9 @@
 const TOKEN_KEY = "cs110_merchant_token";
 
+const API_BASE =
+    import.meta.env.VITE_API_URL ||
+    "http://localhost:5050/api"; 
+
 export function getToken() {
     return localStorage.getItem(TOKEN_KEY);
 }
@@ -17,7 +21,7 @@ async function request(path, { method = "GET", body, auth = true } = {}) {
         if (token) headers.Authorization = `Bearer ${token}`;
     }
 
-    const res = await fetch(`/api${path}`, {
+    const res = await fetch(`${API_BASE}${path}`, {
         method,
         headers,
         body: body !== undefined ? JSON.stringify(body) : undefined,
