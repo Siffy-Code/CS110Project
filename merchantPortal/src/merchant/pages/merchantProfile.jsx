@@ -9,7 +9,7 @@ import "../styles/merchant.css";
 
 export default function MerchantProfile() {
 
-    const { user, merchant } = useAuth();
+    const { user, merchant, setMerchant } = useAuth();
 
     const [form, setForm] = useState({
         storeName: "",
@@ -61,7 +61,11 @@ export default function MerchantProfile() {
 
     try {
 
-        await api.updateMerchantProfile(form);
+        const res = await api.updateMerchantProfile(form);
+
+        if (res.merchant) {
+            setMerchant(res.merchant);
+        }
 
         setSuccess(
             "Profile updated successfully."
