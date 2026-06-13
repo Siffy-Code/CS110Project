@@ -3,7 +3,8 @@ CS110 Marketplace - group project
 
 Each app must be run separately, so you will need 4 terminals to run our project
 Each app is on a different server host and links together in that way directly by structure
-(Integration strategy by Peter)
+
+Look for readMe files in Merchant for each group member's individual documentation for the project!
 
 Folders
 -------
